@@ -40,11 +40,18 @@ INSTALLED_APPS = [
 
     # сторонние библиотеки
     'rest_framework',
+    'rest_framework.authtoken',
 
     # свои приложения
     'accounts',
     'books'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
