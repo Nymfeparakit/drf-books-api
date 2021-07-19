@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Comment(models.Model):
@@ -7,7 +7,7 @@ class Comment(models.Model):
     Модель комментария пользователя
     """
     owner = models.ForeignKey(
-        'User',
+        settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         related_name='comments',
         null=True
