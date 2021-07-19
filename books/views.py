@@ -3,8 +3,8 @@ from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework import generics
 
-from .models import Book, Genre
-from .serializers import BookSerializer, GenreSerializer
+from .models import Book, Genre, Author
+from .serializers import BookSerializer, GenreSerializer, AuthorSerializer
 
 
 class BookViewSet(viewsets.ModelViewSet):
@@ -29,3 +29,11 @@ class GenreRetrieveView(generics.RetrieveAPIView):
     """
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+
+
+class AuthorListView(generics.ListAPIView):
+    """
+    View для получения списка авторов
+    """
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
