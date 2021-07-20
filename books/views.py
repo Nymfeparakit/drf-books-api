@@ -2,10 +2,16 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, SAFE_METHODS
 
 from .models import Book, Genre, Author
 from .serializers import BookSerializer, GenreSerializer, AuthorSerializer
+
+
+class IsAuthor(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return request.method in SAFE_METHODS or obj.author == request.user
 
 
 class BookViewSet(viewsets.ModelViewSet):
@@ -14,11 +20,11 @@ class BookViewSet(viewsets.ModelViewSet):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthor]
 
 
 class GenreListView(generics.ListAPIView):
-    """
+    """models.Model
     View для получения списка жанров 
     """
     queryset = Genre.objects.all()
