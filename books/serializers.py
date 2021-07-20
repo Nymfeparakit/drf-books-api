@@ -20,4 +20,4 @@ class GenreSerializer(serializers.ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = ['id', 'name', 'surname', 'patronymic', 'birth_year']
+        fields = ['id', 'first_name', 'last_name', 'patronymic', 'birth_year']

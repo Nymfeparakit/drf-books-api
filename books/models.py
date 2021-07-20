@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
 class Genre(models.Model):
@@ -41,10 +41,6 @@ class Library(models.Model):
         return self.name
 
 
-class Author(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    patronymic = models.CharField(max_length=250)
-    birth_year = models.IntegerField(validators=[MinValueValidator(1000), MaxValueValidator(3000)])
-
-    def __str__(self):
-        return str(self.user)
+class Author(AbstractUser):
+    patronymic = models.CharField(max_length=250, blank=True)
+    birth_year = models.IntegerField(validators=[MinValueValidator(1000), MaxValueValidator(3000)], blank=True, null=True)

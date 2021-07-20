@@ -53,6 +53,8 @@ REST_FRAMEWORK = {
     ],
 }
 
+AUTH_USER_MODEL = 'books.Author'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

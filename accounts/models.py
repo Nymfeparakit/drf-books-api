@@ -6,7 +6,7 @@ class Comment(models.Model):
     """
     Модель комментария пользователя
     """
-    owner = models.ForeignKey(
+    author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         related_name='comments',
