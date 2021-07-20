@@ -4,6 +4,9 @@ from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.permissions import SAFE_METHODS
+from rest_framework.serializers import Serializer
+from rest_framework.response import Response
+from rest_framework.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
 
 
 from .models import Book, Genre, Author
@@ -24,7 +27,13 @@ class BookViewSet(viewsets.ModelViewSet):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthor]
+    permission_classes = [IsAuthorOrReadOnly]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(author=request.user)
+            return Response(serializer.data, status=HTTP_201_CREATED)
 
 
 class GenreListView(generics.ListAPIView):
