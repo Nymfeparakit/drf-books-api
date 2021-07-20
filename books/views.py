@@ -3,13 +3,17 @@ from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import permissions
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, SAFE_METHODS
+from rest_framework.permissions import SAFE_METHODS
+
 
 from .models import Book, Genre, Author
 from .serializers import BookSerializer, GenreSerializer, AuthorSerializer
 
 
-class IsAuthor(permissions.BasePermission):
+class IsAuthorOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.method in SAFE_METHODS or request.user and request.user.is_authenticated
+
     def has_object_permission(self, request, view, obj):
         return request.method in SAFE_METHODS or obj.author == request.user
 
