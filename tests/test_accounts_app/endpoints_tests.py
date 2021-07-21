@@ -56,6 +56,7 @@ class TestCommentEndpoints:
         assert response.status_code == status.HTTP_201_CREATED
         expected_json['id'] = response.data['id']
         expected_json['created'] = response.data['created']
+        expected_json['book'] = str(book)
         assert response.data == expected_json
 
     def test_update(self, authenticated_client):
@@ -74,6 +75,7 @@ class TestCommentEndpoints:
         expected_json['id'] = response.data['id']
         expected_json['created'] = response.data['created']
         expected_json['author'] = str(user)
+        expected_json['book'] = str(book)
         assert json.loads(response.content) == expected_json
 
     @pytest.mark.parametrize('field_name', ['text'])
