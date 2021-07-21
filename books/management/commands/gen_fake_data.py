@@ -11,11 +11,11 @@ from books.models import Genre, Book, Author
 from accounts.models import Comment
 
 
-genres_names = ['Detective', 'Fantasy', 'Fiction', 'Thriller', 'Horror', 'Sci-Fi', 'Romace', 'Short stories']
+genres_names = ['Detective', 'Fantasy', 'Fiction', 'Thriller', 'Horror', 'Sci-Fi', 'Romance', 'Short stories']
 COMMENTS_TEXT = ['Здесь есть комментарий', 'Ну такое', 'Очень даже ничего', 'Не читал, но осуждаю', 'Превосходно']
 # Максимальное количество одновременно вставляемых строк, чтобы не превысить максимальное число вставляемых в sqlite элементов
 MAX_BATCH_SIZE = 500 
-AUTHORS_NUM_DEFAULT = 10
+AUTHORS_NUM_DEFAULT = 500
 BOOKS_PER_AUTHOR_NUM = 5
 COMMENTS_PER_BOOK_NUM = 5
 
