@@ -14,13 +14,13 @@ class TestCommentEndpoints:
 
     endpoint = '/api/books/{book_id}/comments/'
 
-    def test_retrieve(self, client):
+    def test_retrieve(self, client, create_user):
         book = baker.make(Book)
-        comment = baker.make(Comment, book=book)
+        comment = baker.make(Comment, book=book, author=create_user)
         expected_json = {
             'id': comment.id,
             'author': str(comment.author),
-            # 'book': comment.book,
+            'book': str(comment.book),
             'created': comment.created.strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
             'text': comment.text
         }
