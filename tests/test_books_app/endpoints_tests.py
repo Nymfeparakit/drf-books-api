@@ -34,19 +34,25 @@ class TestGenreEndpoints:
         assert len(response.data) == 3
 
 
+@pytest.fixture
+def horror_genre(db):
+    return baker.make(Genre, name='horror')
+
+
+@pytest.mark.usefixtures('horror_genre')
 class TestBookEndpoints:
 
     endpoint = '/api/books/'
 
-    def test_retrieve(self, client):
-        genre = baker.make(Genre)
-        book = baker.make(Book, genre=genre)
+
+    def test_retrieve(self, client, horror_genre):
+        book = baker.make(Book, genre=horror_genre)
         expected_json = {
             'id': book.id,
             'title': book.title,
             'publ_year': book.publ_year,
             'author': str(book.author),
-            # 'genre': {'id': book.genre.id, 'name': book.genre.name}
+            'genre': 'horror'
         }
         url = f'{self.endpoint}{book.id}/'
 
@@ -63,19 +69,18 @@ class TestBookEndpoints:
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 3
 
-    def test_create(self, authenticated_client):
+    def test_create(self, authenticated_client, horror_genre):
         client, user = authenticated_client
-        genre = baker.make(Genre, name='horror')
         payload = {
             'title': 'Вам и не снилось',
             'publ_year': 1984,
-            # 'genre': 'horror',
+            'genre': 'horror',
         }
         expected_json = {
             'title': payload['title'],
             'publ_year': payload['publ_year'],
             'author': str(user),
-            # 'genre': payload['genre'],
+            'genre': payload['genre'],
         }
 
         response = client.post(self.endpoint, payload, follow=True, format='json')
@@ -84,12 +89,13 @@ class TestBookEndpoints:
         expected_json['id'] = response.data['id']
         assert response.data == expected_json
 
-    def test_update(self, authenticated_client):
+    def test_update(self, authenticated_client, horror_genre):
         client, user = authenticated_client
-        book = baker.make(Book, author=user)
+        book = baker.make(Book, author=user, genre=horror_genre)
         payload = {
             'title': 'new title',
-            'publ_year': 1984
+            'publ_year': 1984,
+            'genre': 'horror',
         }
         url = f'{self.endpoint}{book.id}/'
 
