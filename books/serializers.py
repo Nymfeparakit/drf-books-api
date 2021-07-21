@@ -50,4 +50,4 @@ class BookSerializer(serializers.ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = ['id', 'first_name', 'last_name', 'patronymic', 'birth_year']
+        fields = ['id', 'username', 'first_name', 'last_name', 'patronymic', 'birth_year']
