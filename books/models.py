@@ -44,3 +44,6 @@ class Library(models.Model):
 class Author(AbstractUser):
     patronymic = models.CharField(max_length=250, blank=True)
     birth_year = models.IntegerField(validators=[MinValueValidator(1000), MaxValueValidator(3000)], blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
