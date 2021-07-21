@@ -1,10 +1,11 @@
 from django.core.management.base import BaseCommand
 import csv
 from django.contrib.auth.models import User
-from mimesis import Person, Datetime
+from mimesis import Person, Datetime, Address
 from mimesis.builtins import RussiaSpecProvider
 import random
 from django.contrib.auth.hashers import make_password
+from uuid import uuid4
 
 from books.models import Genre, Book, Author
 from accounts.models import Comment
@@ -34,8 +35,9 @@ class Command(BaseCommand):
         author_objs = []
         for i in range(AUTHORS_NUM):
             author = Author(
-                username=fake_person.email(unique=True),
+                username=str(uuid4()),
                 password=make_password('123qwerty123'),
+                email=fake_person.email(unique=True),
                 first_name=fake_person.name(),
                 last_name=fake_person.surname(),
                 patronymic=ru_provider.patronymic(),
@@ -46,6 +48,7 @@ class Command(BaseCommand):
         self.stdout.write("Заполнены авторы")
 
     def fill_books(self, fake_date, fake_person):
+        fake_address = Address()
         genres_objs = list(Genre.objects.all())
         books_objs = []
         for i, author in enumerate(Author.objects.all()):
@@ -55,7 +58,7 @@ class Command(BaseCommand):
                     genre=random.choice(genres_objs),
                     author=author,
                     publ_year=fake_date.year(),
-                    title=fake_person.name()
+                    title=f'{fake_person.name()} in {fake_address.city()}'
                 ))
                 if (i+1)*(j+1) % MAX_BATCH_SIZE:
                     Book.objects.bulk_create(books_objs)
@@ -79,7 +82,7 @@ class Command(BaseCommand):
         self.stdout.write("Заполнены комментарии")
 
     def handle(self, *args, **options):
-        fake_person = Person('en')
+        fake_person = Person('ru')
         fake_date = Datetime()
 
         self.fill_genres()
