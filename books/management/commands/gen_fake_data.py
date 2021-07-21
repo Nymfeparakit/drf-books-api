@@ -15,7 +15,7 @@ genres_names = ['Detective', 'Fantasy', 'Fiction', 'Thriller', 'Horror', 'Sci-Fi
 COMMENTS_TEXT = ['Здесь есть комментарий', 'Ну такое', 'Очень даже ничего', 'Не читал, но осуждаю', 'Превосходно']
 # Максимальное количество одновременно вставляемых строк, чтобы не превысить максимальное число вставляемых в sqlite элементов
 MAX_BATCH_SIZE = 500 
-AUTHORS_NUM = 500
+AUTHORS_NUM_DEFAULT = 10
 BOOKS_PER_AUTHOR_NUM = 5
 COMMENTS_PER_BOOK_NUM = 5
 
@@ -23,17 +23,26 @@ COMMENTS_PER_BOOK_NUM = 5
 class Command(BaseCommand):
     help = "Заполняет базу данных тестовыми данными"
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--authors',
+            '-a',
+            type=int,
+            help='Указать количество генерируемых авторов',
+        )
+
     def fill_genres(self):
         # генерируем жанры
         genres_objs = [Genre(name=name) for name in genres_names]
         Genre.objects.bulk_create(genres_objs)
         self.stdout.write("Заполнены жанры")
 
-    def fill_authors(self, fake_date, fake_person):
+    def fill_authors(self, fake_date, fake_person, authors_num=None):
         ru_provider = RussiaSpecProvider()
         # генерируем авторов
         author_objs = []
-        for i in range(AUTHORS_NUM):
+        authors_num = authors_num if authors_num else AUTHORS_NUM_DEFAULT
+        for i in range(authors_num):
             author = Author(
                 username=str(uuid4()),
                 password=make_password('123qwerty123'),
@@ -86,7 +95,7 @@ class Command(BaseCommand):
         fake_date = Datetime()
 
         self.fill_genres()
-        self.fill_authors(fake_date, fake_person)
+        self.fill_authors(fake_date, fake_person, options['authors'])
         self.fill_books(fake_date, fake_person)
         self.fill_comments()
 
