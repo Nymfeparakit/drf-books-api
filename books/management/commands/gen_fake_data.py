@@ -37,7 +37,9 @@ class Command(BaseCommand):
         Genre.objects.bulk_create(genres_objs)
         self.stdout.write("Заполнены жанры")
 
-    def fill_authors(self, fake_date, fake_person, authors_num=None):
+    def fill_authors(self, authors_num=None):
+        fake_date = Datetime()
+        fake_person = Person('ru')
         ru_provider = RussiaSpecProvider()
         # генерируем авторов
         author_objs = []
@@ -56,7 +58,9 @@ class Command(BaseCommand):
         Author.objects.bulk_create(author_objs)
         self.stdout.write("Заполнены авторы")
 
-    def fill_books(self, fake_date, fake_person):
+    def fill_books(self):
+        fake_date = Datetime()
+        fake_person = Person('en')
         fake_address = Address()
         genres_objs = list(Genre.objects.all())
         books_objs = []
@@ -91,12 +95,9 @@ class Command(BaseCommand):
         self.stdout.write("Заполнены комментарии")
 
     def handle(self, *args, **options):
-        fake_person = Person('ru')
-        fake_date = Datetime()
-
         self.fill_genres()
-        self.fill_authors(fake_date, fake_person, options['authors'])
-        self.fill_books(fake_date, fake_person)
+        self.fill_authors(options['authors'])
+        self.fill_books()
         self.fill_comments()
 
         self.stdout.write(self.style.SUCCESS("Тестовые данные успешно сгенерированы"))
