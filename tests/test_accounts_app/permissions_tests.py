@@ -30,7 +30,7 @@ class TestCommentPermissions:
         response = client.get(self.endpoint.format(book_id=book.id), follow=True, format='json')
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(json.loads(response.content)) == 3
+        assert len(json.loads(response.content)['results']) == 3
 
     def test_not_authenticated_can_not_update(self, client):
         book = baker.make(Book)

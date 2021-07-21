@@ -31,7 +31,7 @@ class TestGenreEndpoints:
         response = client.get(self.endpoint, follow=True)
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 3
+        assert len(json.loads(response.content)['results']) == 3
 
 
 @pytest.fixture
@@ -67,7 +67,7 @@ class TestBookEndpoints:
         response = client.get(self.endpoint, follow=True)
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 3
+        assert len(json.loads(response.content)['results']) == 3
 
     def test_create(self, authenticated_client, horror_genre):
         client, user = authenticated_client

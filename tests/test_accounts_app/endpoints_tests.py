@@ -38,7 +38,7 @@ class TestCommentEndpoints:
         response = client.get(self.endpoint.format(book_id=book.id), follow=True)
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(json.loads(response.content)) == 3
+        assert len(json.loads(response.content)['results']) == 3
 
     def test_create(self, authenticated_client):
         client, user = authenticated_client
@@ -116,4 +116,4 @@ class TestAuthorEndpoints:
         response = client.get(self.endpoint, follow=True)
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(json.loads(response.content)) == 3
+        assert len(json.loads(response.content)['results']) == 3
