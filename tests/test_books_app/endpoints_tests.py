@@ -97,12 +97,12 @@ class TestBookEndpoints:
             'publ_year': 1984,
             'genre': 'horror',
         }
+        expected_json = payload
         url = f'{self.endpoint}{book.id}/'
 
         response = client.put(url, payload, follow=True, format='json')
 
         assert response.status_code == status.HTTP_200_OK
-        expected_json = payload
         expected_json['id'] = response.data['id']
         expected_json['author'] = response.data['author']
         assert json.loads(response.content) == expected_json
@@ -115,10 +115,10 @@ class TestBookEndpoints:
             'title': 'new title',
             'publ_year': 1984
         }
+        expected_data = new_data[field_name]
         url = f'{self.endpoint}{book.id}/'
 
         response = client.patch(url, {field_name: new_data[field_name]}, follow=True, format='json')
-        expected_data = new_data[field_name]
 
         assert response.status_code == status.HTTP_200_OK
         assert json.loads(response.content)[field_name] == expected_data

@@ -71,12 +71,7 @@ class TestCommentEndpoints:
         response = client.put(url, payload, follow=True, format='json')
 
         assert response.status_code == status.HTTP_200_OK
-        expected_json = payload
-        expected_json['id'] = response.data['id']
-        expected_json['created'] = response.data['created']
-        expected_json['author'] = str(user)
-        expected_json['book'] = str(book)
-        assert json.loads(response.content) == expected_json
+        assert json.loads(response.content)['text'] == expected_json['text']
 
     @pytest.mark.parametrize('field_name', ['text'])
     def test_partial_update(self, authenticated_client, field_name):
@@ -86,10 +81,10 @@ class TestCommentEndpoints:
         new_data = {
             'text': 'Здесь написан новый комментарий'
         }
+        expected_data = new_data[field_name]
         url = self.endpoint.format(book_id=book.id) + f'{comment.id}/'
 
         response = client.patch(url, {field_name: new_data[field_name]}, follow=True, format='json')
-        expected_data = new_data[field_name]
 
         assert response.status_code == status.HTTP_200_OK
         assert json.loads(response.content)[field_name] == expected_data
