@@ -12,7 +12,7 @@
 `pytest tests`  
 Содержимое тестов можно найти в следующих файлах:  
 ```
-test  
+tests  
 ├── test_accounts_app  
 │   ├── endpoints_tests.py # тесты API CRUD  
 │   ├── permissions_tests.py # тесты для ограничений доступа (permissions)  
