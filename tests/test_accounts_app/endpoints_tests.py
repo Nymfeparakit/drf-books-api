@@ -66,6 +66,7 @@ class TestCommentEndpoints:
         payload = {
             'text': 'Здесь написан новый комментарий'
         }
+        expected_json = payload
         url = self.endpoint.format(book_id=book.id) + f'{comment.id}/'
 
         response = client.put(url, payload, follow=True, format='json')
