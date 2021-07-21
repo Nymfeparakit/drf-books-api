@@ -45,12 +45,10 @@ class TestCommentEndpoints:
         book = baker.make(Book)
         payload = {
             'text': 'Здесь написан комментарий'
-            # 'genre': 'horror',
         }
         expected_json = {
             'author': str(user),
             'text': 'Здесь написан комментарий'
-            # 'genre': payload['genre'],
         }
 
         response = client.post(self.endpoint.format(book_id=book.id), payload, follow=True, format='json')
